@@ -6,7 +6,6 @@
 	},
 	"null-character": 65533,
 	"hooks": {
-		"pre-overlays": "overlays.character.source.x += overlays.expression.data.info.offset"
 	},
 	"overlays": {
 		"character": {
@@ -30,40 +29,12 @@
 			"default": "neutro",
 			"options": {
 				"neutro": {
-					"x": 144,
-					"y": 98,
-					"w": 8,
-					"h": 8,
-					"info": {
-						"offset": 0
-					}
 				},
 				"feliz": {
-					"x": 144,
-					"y": 106,
-					"w": 8,
-					"h": 8,
-					"info": {
-						"offset": 36
-					}
 				},
 				"triste": {
-					"x": 144,
-					"y": 114,
-					"w": 8,
-					"h": 8,
-					"info": {
-						"offset": 72
-					}
 				},
 				"raivoso": {
-					"x": 144,
-					"y": 122,
-					"w": 8,
-					"h": 8,
-					"info": {
-						"offset": 108
-					}
 				}
 			}
 		}

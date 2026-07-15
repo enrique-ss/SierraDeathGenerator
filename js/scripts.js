@@ -945,8 +945,18 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 
 				// Handle file-based character images
 				if(adv.useFile){
-					var filePath = gamesPath + adv.file
-					if(filePath in characterImages){
+					// Get expression selection to create combined filename
+					var expression = ''
+					if('expression' in overlays){
+						expression = overlays.expression.name
+					}
+					
+					// Create combined filename: character_expression.png
+					var baseFile = adv.file.replace('.png', '')
+					var combinedFile = baseFile + '_' + expression + '.png'
+					var filePath = gamesPath + combinedFile
+					
+					if(filePath in characterImages && characterImages[filePath].complete){
 						source_image = characterImages[filePath]
 						source_x = source_y = 0
 						source_w = source_image.width
@@ -955,12 +965,18 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 						overlay_h = source_h * scale
 					}else{
 						// Load the image if not cached
-						var img = new Image()
-						img.onload = function(){
+						if(!(filePath in characterImages)){
+							var img = new Image()
+							img.onload = function(){
+								characterImages[filePath] = img
+								renderText()
+							}
+							img.onerror = function(){
+								console.error('Failed to load image:', filePath)
+							}
+							img.src = filePath
 							characterImages[filePath] = img
-							renderText()
 						}
-						img.src = filePath
 						return // Skip drawing until image is loaded
 					}
 				}
