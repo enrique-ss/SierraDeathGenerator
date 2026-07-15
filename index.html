@@ -15,7 +15,7 @@
 		
 		body {
 			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+			background: #1a1a1a;
 			margin: 0;
 			padding: 10px;
 			min-height: 100vh;
@@ -35,7 +35,7 @@
 		
 		h1 {
 			text-align: center;
-			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
 			background-clip: text;
@@ -50,6 +50,18 @@
 			background: #2a2a3e;
 			border-radius: 8px;
 			padding: 10px;
+		}
+		
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: #2a2a3e;
+			margin: 0;
+			padding: 10px;
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
 		}
 		
 		#death {
@@ -108,7 +120,7 @@
 		.control-group select:focus,
 		.control-group textarea:focus {
 			outline: none;
-			border-color: #667eea;
+			border-color: #ff6b9d;
 		}
 		
 		.control-group textarea {
@@ -133,22 +145,26 @@
 		}
 		
 		.save-button {
-			display: block;
-			width: 100%;
-			padding: 12px;
-			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			display: flex;
+			width: 60px;
+			height: 60px;
+			margin: 20px auto 0;
+			padding: 0;
+			background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
 			color: white;
 			border: none;
-			border-radius: 6px;
-			font-size: 14px;
+			border-radius: 50%;
+			font-size: 12px;
 			font-weight: 600;
 			cursor: pointer;
 			transition: transform 0.2s, box-shadow 0.2s;
+			align-items: center;
+			justify-content: center;
 		}
 		
 		.save-button:hover {
 			transform: translateY(-1px);
-			box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+			box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
 		}
 		
 		.save-button:active {
@@ -207,9 +223,15 @@
 				</div>
 			</div>
 		</div>
-		
-		<a href="#" id="save" class="save-button">Salvar Imagem</a>
 	</div>
+	
+	<a href="#" id="save" class="save-button">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+			<polyline points="17 21 17 13 7 13 7 21"></polyline>
+			<polyline points="7 3 7 8 15 8"></polyline>
+		</svg>
+	</a>
 
 	<!-- Other/Main Scripts after DOM load -->
 	<script src="js/generators.js"></script>
