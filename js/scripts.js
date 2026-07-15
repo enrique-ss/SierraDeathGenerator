@@ -8,6 +8,7 @@ var overlayNames = null
 var overlayOverrides = null
 var selectedGenerator = null
 var glitch = false
+var characterImages = {}
 
 function applyHashChange(){
 	selectedGenerator = window.location.hash.substr(1)
@@ -734,24 +735,42 @@ function parseOverlays(fontInfo){
 				var sname = $('#overlay-'+oname+' option:selected').val()
 				var adv=currentOverlay.options[sname]
 
-				overlays[oname] = {
+				// Check if this overlay uses file-based images
+				var useFile = 'file' in adv
+				var overlayData = {
 					"name":sname,
 					"type":"select",
 					"x":currentOverlay.x,
 					"y":currentOverlay.y,
-					"w":adv.w,
-					"h":adv.h,
 					"background":first(currentOverlay['background'], false),
 					"blend":first(currentOverlay['blend-mode'], 'source-over'),
 					"stage":first(currentOverlay.stage, "pre-text"),
 					"title":first(currentOverlay.title,sname),
 					"flip":first(adv.flip, currentOverlay.flip, ''),
-					"source":{
+					"useFile":useFile
+				}
+
+				if(useFile){
+					// File-based character image
+					overlayData.file = adv.file
+					overlayData.source = {
+						"x":0,
+						"y":0
+					}
+					// Size will be determined when image is loaded
+					overlayData.w = 0
+					overlayData.h = 0
+				}else{
+					// Original coordinate-based system
+					overlayData.w = adv.w
+					overlayData.h = adv.h
+					overlayData.source = {
 						"x":adv.x,
 						"y":adv.y
-					},
-					"data":adv
+					}
 				}
+
+				overlays[oname] = overlayData
 			}
 		}
 	}
@@ -924,6 +943,28 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 				var source_w = adv.w, source_h = adv.h
 				var source_image = fontImage
 
+				// Handle file-based character images
+				if(adv.useFile){
+					var filePath = gamesPath + adv.file
+					if(filePath in characterImages){
+						source_image = characterImages[filePath]
+						source_x = source_y = 0
+						source_w = source_image.width
+						source_h = source_image.height
+						overlay_w = source_w * scale
+						overlay_h = source_h * scale
+					}else{
+						// Load the image if not cached
+						var img = new Image()
+						img.onload = function(){
+							characterImages[filePath] = img
+							renderText()
+						}
+						img.src = filePath
+						return // Skip drawing until image is loaded
+					}
+				}
+
 				context.save()
 				if(adv.flip!==''){
 					context.translate(overlay_x, overlay_y)
@@ -951,8 +992,8 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 				context.restore()
 			}
 		})
-		context.globalCompositeOperation = "source-over"
 	}
+	context.globalCompositeOperation = "source-over"
 
 	// Clear before drawing, as transparents might get overdrawn
 	context.clearRect(0, 0, canvas.width, canvas.height)
@@ -1089,17 +1130,17 @@ function buildBorder(fontImage,fontInfo,w,h, border_sides){
 function resetOverlays(){
 	overlayOverrides = {}
 	overlayNames = []
-	$('.overlays p').remove()
+	$('.overlays label').remove()
 	if('overlays' in fontInfo){
 		var overlays = fontInfo.overlays
 		for(key in overlays) {
 			if(overlays.hasOwnProperty(key)) {
 				overlayNames.push(key)
 				var overlay = overlays[key]
-				var pwrapper=$("<p>").text(overlay.title+': ')
+				var labelwrapper=$("<label>").text(overlay.title+': ')
 				if(overlay.title ==''){
 					// Internal effect, don't show to the user
-					pwrapper.addClass('internal-overlay')
+					labelwrapper.addClass('internal-overlay')
 				}
 				if(overlay.type=='slider'){
 					var range = $('<input type="range">').attr('id','overlay-'+key)
@@ -1109,7 +1150,7 @@ function resetOverlays(){
 					if(overlay.default){
 						range.attr('value',overlay.default)
 					}
-					range.appendTo(pwrapper)
+					range.appendTo(labelwrapper)
 				}else{
 					var select = $('<select class="overlay-selector">').attr('id','overlay-'+key)
 					for(opt in overlay.options){
@@ -1117,15 +1158,15 @@ function resetOverlays(){
 							$('<option>').text(first(overlay.options[opt].title,opt)).attr('value',opt).prop('selected',opt==overlay['default']).appendTo(select)
 						}
 					}
-					select.appendTo(pwrapper)
+					select.appendTo(labelwrapper)
 					if('replaceable' in overlay){
 						var uploadlabel=$(' <label>Replace image:</label>')
 						var upload=$('<input type="file" class="overlay-replacement" accept="image/*"/>').attr('id','replace-'+key)
 						upload.appendTo(uploadlabel)
-						uploadlabel.appendTo(pwrapper)
+						uploadlabel.appendTo(labelwrapper)
 					}
 				}
-				pwrapper.appendTo($('.overlays'))
+				labelwrapper.appendTo($('.overlays'))
 			}
 		}
 	}

@@ -12,140 +12,24 @@
 		"character": {
 			"x": 4,
 			"y": 7,
-			"title": "Character",
-			"default": "Sigrid",
+			"title": "Personagem",
+			"default": "ana",
 			"options": {
-				"Mercia": {
-					"x": 0,
-					"y": 98,
-					"w": 36,
-					"h": 36
+				"ana": {
+					"file": "characters/ana.png"
 				},
-				"Emeric": {
-					"x": 0,
-					"y": 134,
-					"w": 36,
-					"h": 36
-				},
-				"Caesar": {
-					"x": 0,
-					"y": 170,
-					"w": 36,
-					"h": 36
-				},
-				"Mercival": {
-					"x": 0,
-					"y": 206,
-					"w": 36,
-					"h": 36
-				},
-				"Cherrystone": {
-					"x": 0,
-					"y": 242,
-					"w": 36,
-					"h": 36
-				},
-				"Valder": {
-					"x": 0,
-					"y": 278,
-					"w": 36,
-					"h": 36
-				},
-				"Ragna": {
-					"x": 0,
-					"y": 314,
-					"w": 36,
-					"h": 36
-				},
-				"Sigrid": {
-					"x": 0,
-					"y": 350,
-					"w": 36,
-					"h": 36
-				},
-				"Felheim": {
-					"x": 0,
-					"y": 386,
-					"w": 36,
-					"h": 36
-				},
-				"Greenfinger": {
-					"x": 0,
-					"y": 422,
-					"w": 36,
-					"h": 36
-				},
-				"Nuru": {
-					"x": 0,
-					"y": 458,
-					"w": 36,
-					"h": 36
-				},
-				"Sedge": {
-					"x": 0,
-					"y": 494,
-					"w": 36,
-					"h": 36
-				},
-				"Floran": {
-					"x": 0,
-					"y": 530,
-					"w": 36,
-					"h": 36
-				},
-				"Elodie": {
-					"x": 0,
-					"y": 566,
-					"w": 36,
-					"h": 36
-				},
-				"Dark_Mercia": {
-					"x": 0,
-					"y": 602,
-					"w": 36,
-					"h": 36,
-					"title":"Dark Mercia"
-				},
-				"Tenri": {
-					"x": 0,
-					"y": 638,
-					"w": 36,
-					"h": 36
-				},
-				"Ryota": {
-					"x": 0,
-					"y": 674,
-					"w": 36,
-					"h": 36
-				},
-				"Koji": {
-					"x": 0,
-					"y": 710,
-					"w": 36,
-					"h": 36
-				},
-				"Heavensong": {
-					"x": 0,
-					"y": 746,
-					"w": 36,
-					"h": 36
-				},
-				"Outlaws": {
-					"x": 0,
-					"y": 782,
-					"w": 36,
-					"h": 36
+				"paula": {
+					"file": "characters/paula.png"
 				}
-
 			}
 		},
 		"expression": {
 			"x": 0,
 			"y": 0,
-			"title": "Expression",
-			"default": "Neutral",
+			"title": "Expressão",
+			"default": "neutro",
 			"options": {
-				"Neutral": {
+				"neutro": {
 					"x": 144,
 					"y": 98,
 					"w": 8,
@@ -154,7 +38,7 @@
 						"offset": 0
 					}
 				},
-				"Happy": {
+				"feliz": {
 					"x": 144,
 					"y": 106,
 					"w": 8,
@@ -163,7 +47,7 @@
 						"offset": 36
 					}
 				},
-				"Sad": {
+				"triste": {
 					"x": 144,
 					"y": 114,
 					"w": 8,
@@ -172,7 +56,7 @@
 						"offset": 72
 					}
 				},
-				"Extra": {
+				"raivoso": {
 					"x": 144,
 					"y": 122,
 					"w": 8,

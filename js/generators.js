@@ -2819,7 +2819,7 @@ var generators={
 		'source': 'Chucklefish',
 		'sourceurl': 'https://en.wikipedia.org/wiki/Chucklefish',
 		'platform':'win32',
-		'defaulttext': 'Hmph... So many humans. How unpleasant. Still,\nI can avoid most of them.',
+		'defaulttext': 'Hmph... Tantos humanos. Que desagradável.',
 		'year':2019,
 		'added':'2019-02-04',
 		'updated':'2019-02-05',

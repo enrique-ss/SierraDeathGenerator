@@ -4,100 +4,222 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>The Death Generator</title>
-	<meta name="description" content="The Death Generator">
-	<meta name="author" content="@foone">
-
-	<!-- Styles -->
+	<title>Gerador de Diálogos</title>
+	<meta name="description" content="Gerador de Diálogos">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="css/tachyons.min.css">
-	<link rel="stylesheet" href="css/styles.css?v=1.0">
 
-	<!--[if lt IE 9]>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-	<![endif]-->
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+			margin: 0;
+			padding: 10px;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.container {
+			max-width: 600px;
+			width: 100%;
+			background: #1e1e2e;
+			border-radius: 15px;
+			padding: 15px;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+		}
+		
+		h1 {
+			text-align: center;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			margin: 0 0 15px 0;
+			font-size: 1.5em;
+		}
+		
+		.canvas-container {
+			display: flex;
+			justify-content: center;
+			margin-bottom: 15px;
+			background: #2a2a3e;
+			border-radius: 8px;
+			padding: 10px;
+		}
+		
+		#death {
+			max-width: 100%;
+			height: auto;
+			image-rendering: pixelated;
+		}
+		
+		#border {
+			display: none;
+		}
+		
+		.controls {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			margin-bottom: 10px;
+		}
+		
+		.control-row {
+			display: flex;
+			gap: 8px;
+		}
+		
+		.control-group {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.control-group label {
+			font-weight: 600;
+			color: #b0b0c0;
+			margin-bottom: 4px;
+			font-size: 14px;
+		}
+		
+		label {
+			font-weight: 600;
+			color: #b0b0c0;
+			margin-bottom: 4px;
+			font-size: 14px;
+		}
+		
+		.control-group select,
+		.control-group textarea {
+			padding: 8px;
+			border: 2px solid #3a3a4e;
+			border-radius: 6px;
+			font-size: 14px;
+			background: #2a2a3e;
+			color: #e0e0e0;
+			transition: border-color 0.3s;
+		}
+		
+		.control-group select:focus,
+		.control-group textarea:focus {
+			outline: none;
+			border-color: #667eea;
+		}
+		
+		.control-group textarea {
+			resize: vertical;
+			min-height: 60px;
+			font-family: inherit;
+		}
+		
+		.overlays {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+		
+		.overlays label {
+			margin: 0;
+			flex: 1;
+		}
+		
+		.overlays select {
+			width: 100%;
+		}
+		
+		.save-button {
+			display: block;
+			width: 100%;
+			padding: 12px;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			border: none;
+			border-radius: 6px;
+			font-size: 14px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: transform 0.2s, box-shadow 0.2s;
+		}
+		
+		.save-button:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+		}
+		
+		.save-button:active {
+			transform: translateY(0);
+		}
+		
+		@media (max-width: 480px) {
+			.control-row {
+				flex-direction: column;
+			}
+			
+			.overlays {
+				flex-direction: column;
+			}
+			
+			.container {
+				padding: 10px;
+				border-radius: 10px;
+			}
+			
+			h1 {
+				font-size: 1.3em;
+			}
+		}
+		
+		.source {
+			display: none;
+		}
+	</style>
 
 	<!-- Jquery -->
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/jquery.waitforimages.min.js"></script>
 	<script src="js/linebreak.js"></script>
 
-	<script type="text/javascript" src="js/gif/LZWEncoder.js"></script>
-	<script type="text/javascript" src="js/gif/NeuQuant.js"></script>
-	<script type="text/javascript" src="js/gif/GIFEncoder.js"></script>
-	<script type="text/javascript" src="js/gif/b64.js"></script>
-
 </head>
 
-<body class="w-100 sans-serif themeswitch code">
-
-	<main>
-		<div id="gallery-box">
-			<div class="mw9 center ph1-ns flex items-center">
-				<h1 class="mw9f3 fw6 ttu ph3">The Death Generator</h1>
-				<div class="credits ph3">
-					By <a href="http://wiki.averlong.com/w/Main_Page">Alice Averlong</a><br />
-					Project source code on <a href="https://github.com/foone/SierraDeathGenerator">github</a>.<br />
-					Support this project on <a href="https://ko-fi.com/fooneturing">Ko-fi</a> or <a href="https://www.patreon.com/foone">Patreon</a>!
-				</div>
-			</div>
-			<div id="generator-collection" class="flex flex-wrap">
-			</div>
+<body>
+	<div class="container">
+		<h1>Gerador de Diálogos</h1>
+		
+		<div class="canvas-container">
+			<canvas id="death"></canvas>
+			<canvas id="border"></canvas>
 		</div>
-		<div id="main-generator-box" class="mw9 center ph1-ns">
-			<div class="cf ph1-ns">
-				<div  class="fl w-100 w-100-ns pa1">
-
-						<h1 class="f3 fw6 ttu change-title">The Death Generator</h1>
-						<a href="#gallery" id="gallery-link" class="f6 link dim ph3 pv2 mb2 dib white bg-dark-gray">Gallery</a>
-						<a href="#random" id="random-generator" class="f6 link dim ph2 pv2 mb2 dib white bg-dark-gray" title="Random generator">&#x1f3b2;</a>
-						<a href="#" id="hidelink" class="f6 link dim ph3 pv2 mb2 dib white bg-dark-gray">- Hide generators</a>
-						<a href="#" id="showlink" class="f6 link dim ph3 pv2 mb2 dib white bg-dark-gray">+ Show other generators</a>
-						<div class="tracked" id="genlist"> </div>
-						<div id="debug-alerts"></div>
-						<div id="main-container">
-							<div class="main-generator">
-								<!-- copyright footnote -->
-								<p><a href="https://github.com/foone/SierraDeathGenerator">Code</a> by <a href="https://digipres.club/@foone">Alice Averlong</a><span id="extra-contrib"></span>, content by <a href="#" class="change-source">somebody</a><span id="content-contrib"></span>. 
-								<a id="playlink" href=""><span id="how-to-use"><!-- this gets replaced by scripts.js based on the generator, but the default option is "Play this game" --></span> on 
-								<span id="where-to-use"><!-- This gets replaced by scripts.js based on the generator, and the default is "the Internet Archive" --></span>!</a></p>
-
-								<!-- Screenshot/Canvas -->
-								<canvas id="death">No canvas!</canvas>
-								<canvas id="border">No canvas!</canvas>
-
-								<!-- Customization -->
-								<p>
-									<textarea cols="40" rows="6" id="sourcetext" class="border-box hover-black measure b--black-20 pa2 mb2"></textarea>
-									<a href="#" id="save"><img class="lightimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgAQMAAADYVuV7AAAABlBMVEX///8AAABVwtN+AAAAAWJLR0QAiAUdSAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAAd0SU1FB+IBBRQ0G7eG+BwAAACiSURBVDjLzdIxCsMwDAVQgQePOkIuIvDRmqP5Br2CS4eM8ZhBxHUUt8gE09KQtNoefGRbFgAkKQapFbNGqtBreAHbAGBTEEyCMSoM0wvdcGeF26wQksZFw2l0ZwDsB1hGsAfrYP8G7Ysa+ey3DarY7mcfN7ey606vcvoaPymMLRC1gDlIVMIVjM9JKuEKEJGJHG+xRHIL2AIjXo1/nqNxfj0AmAoaBZSWo6oAAAAASUVORK5CYII=" width="96" height="96" alt="Save image"/><img class="darkimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAGUExURf///wAAAFXC034AAAACdFJOU/8A5bcwSgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABZ0RVh0U29mdHdhcmUAUGFpbnQuTkVUIDUuMfeD95MAAAC0ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIADgAAAFoAAABphwQAAQAAAGgAAAAAAAAADHcBAOgDAAAMdwEA6AMAAFBhaW50Lk5FVCA1LjEAAwAAkAcABAAAADAyMzABoAMAAQAAAAEAAAAFoAQAAQAAAJIAAAAAAAAAAgABAAIABAAAAFI5OAACAAcABAAAADAxMDAAAAAAFH8Udx7nIb4AAADNSURBVGje7dVBDoAgDATA9v+f9qQG6EJK2gC6eyFG7ZACKlpFpqIwEgNIOiDpgKQD4gKsC+vtsWAD6gK0J4QAPWEGeMs997EQBGAhCoBCGKDpgKYDSoDAn4CaIjAMgaMBXwgQIPBT4AMfO0/9LdcgH8hu0Qd2UfoaHA9wkQlsDEwJ4gHmQ+AAIDoECBAAADqVpwB36RhiBdCWLlvWTqDX0jWA3Z66MBr3AMrHy/+VNeImrQDGLbAXHUx0AdBuu/sKFZ06B6lAZAgQIKB6ARsAGv9m7sm6AAAAAElFTkSuQmCC" width="96" height="96" alt="Save image"/></a>
-									<a href="#" id="makegif"><img class="lightimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgAQMAAADYVuV7AAAABlBMVEX///8AAABVwtN+AAAAj0lEQVQ4y8XTPQrEIBAF4Be2SLPgEXIRwaNlj+ZR9giWKcSJThJ4gltsDMkrlA9Uxj8AoonQbEgMqfBheMU2dfpqt2hrAmFcCK9IGBIBwpgPFDvG9CdKlX1IvZDwNLq30HuIZ26uAq7D/tYdP2U5jWdigvPHp61hrYF9txCQ4X/BtRF5GEOXRgsm5nKauD0ruhv4EIwH690AAAAASUVORK5CYII=" width="96" height="96" alt="Make GIF"/><img class="darkimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAGUExURf///wAAAFXC034AAAACdFJOU/8A5bcwSgAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABZ0RVh0U29mdHdhcmUAUGFpbnQuTkVUIDUuMfeD95MAAAC0ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIADgAAAFoAAABphwQAAQAAAGgAAAAAAAAAYAAAAAEAAABgAAAAAQAAAFBhaW50Lk5FVCA1LjEAAwAAkAcABAAAADAyMzABoAMAAQAAAAEAAAAFoAQAAQAAAJIAAAAAAAAAAgABAAIABAAAAFI5OAACAAcABAAAADAxMDAAAAAAY6QmxFJO/cwAAAC/SURBVGje7djRDoAgCAVQ7v//dE9tZYCZ0NDd++ZCz1bKKkET+RSYkRhA0gFJByQdkCEAI3EFHRha3xdCAE+IARwhCLCFKMAUwgDMAn04HQCBPwBfIbAPYLd+AnsBWhkBAgRWA2CVENgCgBUCWwBwQ2B14EUIELhWTfzPeQl8D4EFgOgQIECgA9xPpz7Sz28N4Jx4X/R5HagJqJ1RAbqve8UB/wHXANqtGX6L0oCRbVoVaD9dvcZRFYgIAQIEgAO9OxxpYJGUOwAAAABJRU5ErkJggg==" width="96" height="96" alt="Make GIF"/></a>
-									<a href="#" id="jsondump" class="debug-only"><img class="lightimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgAQMAAADYVuV7AAAABlBMVEX///8AAABVwtN+AAAAZElEQVQ4y2MYHuD//wPM//9TiWP/B0IOPg7QiXDnUswZBP7BwaFunA5/wPhP/gH7gwo5TA5DRUWFXEUdVk4dQ4Vc/TxsHPmGCrnKfygcqH7GHyATsHBARgMRJkf+AcI5CA7dAAAr2rw763uNiQAAAABJRU5ErkJggg==" width="96" height="96" alt="JSON"/><img class="darkimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAQAAABIkb+zAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAC0ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIADgAAAFoAAABphwQAAQAAAGgAAAAAAAAAYAAAAAEAAABgAAAAAQAAAFBhaW50Lk5FVCA1LjEAAwAAkAcABAAAADAyMzABoAMAAQAAAAEAAAAFoAQAAQAAAJIAAAAAAAAAAgABAAIABAAAAFI5OAACAAcABAAAADAxMDAAAAAAY6QmxFJO/cwAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjH3g/eTAAAAqklEQVR42u3ZwQ6DIBBAQf7/p/VuRBbNEpB5t2qsTiIVaimSJEmSRnUEyjgWAABgZ0D2ydIxAAAAAAAAAADJE7UZJosAAACrAzwHAAAAAAAAAADyJlveDwAAAEiSJEnSttXWT5F1VW1/dBtA7ctbn6/bnvAAXwCtW6cFekICRC/o7qQ9t9TQ/6eXAfQMsOiA7B3UAD0/m28vOO1BtjwgMrimn0osD5Ak/bQTauvbzSQIY0wAAAAASUVORK5CYII=" width="96" height="96" alt="JSON"/></a>
-									<!--
-									<table class="debug-only" class="display: none;">
-										<tr><td> </td><td><button class="move-button" data-moveoffset="0,-1">↑</button></td></tr>
-										<tr><td><button class="move-button" data-moveoffset="-1,0" >←</button></td><td></td><td><button class="move-button" data-moveoffset="+1,0" >→</button></td></tr>
-										<tr><td> </td><td><button class="move-button" data-moveoffset="0,+1" >↓</button></td></tr>
-									<tr><td colspan=3 id="origin-point"></td></tr>
-									</table>
-									-->
-									<img src="imgs/throbber.gif" id="throbber" /><span id="uploading">dummy</span>
-								</p>
-								<div class="wordwrap"><label><input type=checkbox id="wordwrap" checked="">&nbsp;Automatic wordwrapping</label></div>
-								<div class="overlays"></div>
-								<div class="hidebackground"><label><input type=checkbox id="hidebackground">&nbsp;Transparent background</label></div>
-								<div id="background-explanation">Note: The grey checkboard background will disappear when you click Save, but is included here to make it easier to edit your image</div>
-							</div>
-							<div id="notes"></div>
-						</div>
+		
+		<div class="controls">
+			<div class="control-row">
+				<div class="control-group">
+					<label for="sourcetext">Texto</label>
+					<textarea id="sourcetext" cols="40" rows="6"></textarea>
+				</div>
+				
+				<div class="control-group overlays">
+					<!-- Character and expression selectors will be inserted here by JS -->
 				</div>
 			</div>
 		</div>
-
-	</main>
+		
+		<a href="#" id="save" class="save-button">Salvar Imagem</a>
+	</div>
 
 	<!-- Other/Main Scripts after DOM load -->
 	<script src="js/generators.js"></script>
 	<script src="js/scripts.js"></script>
+	<script>
+		// Automatically load Wargroove generator
+		if(window.location.hash.length === 0 || window.location.hash === '#gallery'){
+			window.location.hash = '#wargroove';
+		}
+	</script>
 
 </body>
 
