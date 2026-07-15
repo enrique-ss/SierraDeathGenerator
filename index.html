@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="pt-BR">
 <head>
 	<meta charset="utf-8">
 
@@ -15,11 +15,12 @@
 		
 		body {
 			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			background: #1a1a1a;
+			background: #2a2a3e;
 			margin: 0;
 			padding: 10px;
 			min-height: 100vh;
 			display: flex;
+			flex-direction: column;
 			align-items: center;
 			justify-content: center;
 		}
@@ -50,18 +51,6 @@
 			background: #2a2a3e;
 			border-radius: 8px;
 			padding: 10px;
-		}
-		
-		body {
-			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			background: #2a2a3e;
-			margin: 0;
-			padding: 10px;
-			min-height: 100vh;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
 		}
 		
 		#death {
@@ -237,10 +226,8 @@
 	<script src="js/generators.js"></script>
 	<script src="js/scripts.js"></script>
 	<script>
-		// Automatically load Wargroove generator
-		if(window.location.hash.length === 0 || window.location.hash === '#gallery'){
-			window.location.hash = '#wargroove';
-		}
+		// Force Wargroove generator to load immediately
+		window.location.hash = '#wargroove';
 	</script>
 
 </body>

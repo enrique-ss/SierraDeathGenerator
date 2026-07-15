@@ -599,15 +599,7 @@ function addDebugAlerts(gen, debugdiv){
 }
 
 function selectGenerator(){
-	if(selectedGenerator=='gallery'){
-		$('#main-generator-box').hide()
-		$('#gallery-box').show()
-	}else{
-		$('#main-generator-box').show()
-		$('#gallery-box').hide()
-	}
-
-
+	// Removed gallery logic - simplified for wargroove only
 	var gen=generators[selectedGenerator]
 	window.location.hash=(glitch?'-':'') + selectedGenerator
 	if(gen === undefined){
@@ -1348,7 +1340,7 @@ function pickRandomGenerator(){
 	selectedGenerator = generator_names[Math.round(generator_names.length * Math.random())]
 }
 if(selectedGenerator===null){
-	selectedGenerator = 'gallery'
+	selectedGenerator = 'wargroove'
 }
 if(selectedGenerator=='random'){
 	pickRandomGenerator();
