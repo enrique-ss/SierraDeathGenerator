@@ -758,9 +758,14 @@ function parseOverlays(fontInfo){
 			}else{
 				var sname = $('#overlay-'+oname+' option:selected').val()
 				var adv=currentOverlay.options[sname]
+				if(!adv){
+					continue
+				}
 
 				// Check if this overlay uses file-based images
-				var useFile = 'file' in adv
+				var replaceBackground = first(adv['replace-background'], null)
+				var skipDraw = first(adv['skip-draw'], !!replaceBackground)
+				var useFile = 'file' in adv && !skipDraw
 				var overlayData = {
 					"name":sname,
 					"type":"select",
@@ -771,7 +776,11 @@ function parseOverlays(fontInfo){
 					"stage":first(currentOverlay.stage, "pre-text"),
 					"title":first(currentOverlay.title,sname),
 					"flip":first(adv.flip, currentOverlay.flip, ''),
-					"useFile":useFile
+					"useFile":useFile,
+					"replaceBackground":replaceBackground,
+					"skipDraw":skipDraw,
+					"noExpression":first(adv['no-expression'], false),
+					"origin":adv.origin
 				}
 
 				if(useFile){
@@ -787,13 +796,20 @@ function parseOverlays(fontInfo){
 					// Size will be determined when image is loaded
 					overlayData.w = 0
 					overlayData.h = 0
-				}else{
+				}else if(!skipDraw){
 					// Original coordinate-based system
 					overlayData.w = adv.w
 					overlayData.h = adv.h
 					overlayData.source = {
 						"x":adv.x,
 						"y":adv.y
+					}
+				}else{
+					overlayData.w = 0
+					overlayData.h = 0
+					overlayData.source = {
+						"x":0,
+						"y":0
 					}
 				}
 
@@ -884,8 +900,15 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 		}
 	}
 	var originx = first(fontInfo.origin.x, 0)
-
 	var overlays = parseOverlays(fontInfo)
+	if(overlays.character && overlays.character.origin){
+		if(overlays.character.origin.x !== undefined){
+			originx = overlays.character.origin.x
+		}
+		if(overlays.character.origin.y !== undefined){
+			mainFont.y = overlays.character.origin.y
+		}
+	}
 
 	var rawtext = document.querySelector("textarea#sourcetext").value
 	var fontAliases = first(fontInfo['font-aliases'],{})
@@ -934,6 +957,28 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 		w:baseImage.width,
 		h:baseImage.height
 	}
+	var sceneBackground = baseImage
+	if(overlays.character && overlays.character.replaceBackground){
+		var bgPath = gamesPath + overlays.character.replaceBackground
+		if(!(bgPath in characterImages) || !characterImages[bgPath].complete){
+			if(!(bgPath in characterImages)){
+				var bgImg = new Image()
+				bgImg.onload = function(){
+					characterImages[bgPath] = bgImg
+					renderText()
+				}
+				bgImg.onerror = function(){
+					console.error('Failed to load image:', bgPath)
+				}
+				bgImg.src = bgPath
+				characterImages[bgPath] = bgImg
+			}
+			return
+		}
+		sceneBackground = characterImages[bgPath]
+		outputSize.w = sceneBackground.width
+		outputSize.h = sceneBackground.height
+	}
 	if('dynamic-size' in fontInfo){
 		outputSize.w = eval(fontInfo['dynamic-size'].w)
 		outputSize.h = eval(fontInfo['dynamic-size'].h)
@@ -959,6 +1004,9 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 	function drawOverlays(stage, hide_backgrounds){
 		Object.keys(overlays).forEach(function (key) {
 			var adv = overlays[key]
+			if(adv.skipDraw){
+				return
+			}
 			if(adv.stage == stage){
 				if(adv.background && hide_backgrounds){
 					return
@@ -1064,7 +1112,7 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 			context.drawImage(transparentBG, 0, 0, transparentBG.width*scale, transparentBG.height*scale)
 		}
 	}else{
-		context.drawImage(baseImage, 0, 0, baseImage.width*scale, baseImage.height*scale)
+		context.drawImage(sceneBackground, 0, 0, sceneBackground.width*scale, sceneBackground.height*scale)
 	}
 
 
@@ -1188,6 +1236,16 @@ function buildBorder(fontImage,fontInfo,w,h, border_sides){
 
 }
 
+function syncExpressionVisibility(){
+	if(!fontInfo || !fontInfo.overlays || !fontInfo.overlays.character){
+		return
+	}
+	var charKey = $('#overlay-character').val()
+	var opt = fontInfo.overlays.character.options[charKey]
+	var hideExpression = !!(opt && opt['no-expression'])
+	$('#overlay-expression').closest('label').toggle(!hideExpression)
+}
+
 function resetOverlays(){
 	overlayOverrides = {}
 	overlayNames = []
@@ -1237,6 +1295,7 @@ function resetOverlays(){
 		if('hooks' in fontInfo && hookname in fontInfo.hooks){
 			eval(fontInfo.hooks[hookname])
 		}
+		syncExpressionVisibility()
 		renderText()
 	})
 	$('.overlay-replacement').change(function(){
@@ -1256,6 +1315,7 @@ function resetOverlays(){
 	    }
 	    reader.readAsDataURL(this.files[0]);
 	})
+	syncExpressionVisibility()
 
 }
 

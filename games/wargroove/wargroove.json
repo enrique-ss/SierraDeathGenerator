@@ -30,6 +30,15 @@
 					"expression-map": {
 						"neutro": "neutra"
 					}
+				},
+				"escolhas": {
+					"title": "escolhas",
+					"replace-background": "escolhas.png",
+					"no-expression": true,
+					"origin": {
+						"x": 5,
+						"y": 1
+					}
 				}
 			}
 		},
