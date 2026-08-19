@@ -9,6 +9,38 @@ var overlayOverrides = null
 var selectedGenerator = null
 var glitch = false
 var characterImages = {}
+var fittedOverlayCache = {}
+
+function downscaleImage(img, destW, destH){
+	var key = (img.src || '') + '|' + destW + 'x' + destH
+	if(key in fittedOverlayCache){
+		return fittedOverlayCache[key]
+	}
+	var src = img
+	var w = img.width
+	var h = img.height
+	while(w / 2 > destW && h / 2 > destH){
+		w = Math.ceil(w / 2)
+		h = Math.ceil(h / 2)
+		var tmp = document.createElement('canvas')
+		tmp.width = w
+		tmp.height = h
+		var tctx = tmp.getContext('2d')
+		tctx.imageSmoothingEnabled = true
+		tctx.imageSmoothingQuality = 'high'
+		tctx.drawImage(src, 0, 0, src.width, src.height, 0, 0, w, h)
+		src = tmp
+	}
+	var out = document.createElement('canvas')
+	out.width = destW
+	out.height = destH
+	var octx = out.getContext('2d')
+	octx.imageSmoothingEnabled = true
+	octx.imageSmoothingQuality = 'high'
+	octx.drawImage(src, 0, 0, src.width, src.height, 0, 0, destW, destH)
+	fittedOverlayCache[key] = out
+	return out
+}
 
 function applyHashChange(){
 	selectedGenerator = window.location.hash.substr(1)
@@ -745,6 +777,9 @@ function parseOverlays(fontInfo){
 				if(useFile){
 					// File-based character image
 					overlayData.file = adv.file
+					overlayData.expressionMap = first(adv['expression-map'], {})
+					overlayData.fitW = first(currentOverlay.w, 0)
+					overlayData.fitH = first(currentOverlay.h, 0)
 					overlayData.source = {
 						"x":0,
 						"y":0
@@ -945,6 +980,9 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 					
 					// Create combined filename: character_expression.png
 					var baseFile = adv.file.replace('.png', '')
+					if(adv.expressionMap && expression in adv.expressionMap){
+						expression = adv.expressionMap[expression]
+					}
 					var combinedFile = baseFile + '_' + expression + '.png'
 					var filePath = gamesPath + combinedFile
 					
@@ -953,8 +991,23 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 						source_x = source_y = 0
 						source_w = source_image.width
 						source_h = source_image.height
-						overlay_w = source_w * scale
-						overlay_h = source_h * scale
+						if(adv.fitW && adv.fitH){
+							var boxW = adv.fitW * scale
+							var boxH = adv.fitH * scale
+							var fitScale = Math.min(boxW / source_w, boxH / source_h)
+							overlay_w = Math.max(1, Math.round(source_w * fitScale))
+							overlay_h = Math.max(1, Math.round(source_h * fitScale))
+							overlay_x += Math.round((boxW - overlay_w) / 2)
+							overlay_y += Math.round((boxH - overlay_h) / 2)
+							if(fitScale < 1){
+								source_image = downscaleImage(source_image, overlay_w, overlay_h)
+								source_w = source_image.width
+								source_h = source_image.height
+							}
+						}else{
+							overlay_w = source_w * scale
+							overlay_h = source_h * scale
+						}
 					}else{
 						// Load the image if not cached
 						if(!(filePath in characterImages)){

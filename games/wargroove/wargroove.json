@@ -11,14 +11,25 @@
 		"character": {
 			"x": 4,
 			"y": 7,
+			"w": 36,
+			"h": 36,
 			"title": "Personagem",
-			"default": "ana",
+			"default": "a",
 			"options": {
-				"ana": {
-					"file": "characters/ana.png"
+				"a": {
+					"file": "characters/a.png"
 				},
-				"paula": {
-					"file": "characters/paula.png"
+				"b": {
+					"file": "characters/b.png",
+					"expression-map": {
+						"neutro": "neutra"
+					}
+				},
+				"c": {
+					"file": "characters/c.png",
+					"expression-map": {
+						"neutro": "neutra"
+					}
 				}
 			}
 		},
@@ -34,7 +45,9 @@
 				},
 				"triste": {
 				},
-				"raivoso": {
+				"raiva": {
+				},
+				"timida": {
 				}
 			}
 		}
