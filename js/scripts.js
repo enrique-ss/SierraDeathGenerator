@@ -1382,11 +1382,16 @@ const MAX_FILENAME_LENTH = 64;
 
 function getNameForCurrentImage(ext){
 	var text = document.querySelector("textarea#sourcetext").value
-	text = text.replace(/\n/g," ").replace(/[^-._a-zA-Z0-9 ]/g,"")
-	if(text.length>=MAX_FILENAME_LENTH){
-		text = text.substring(0,MAX_FILENAME_LENTH);
+	text = text.replace(/\s+/g, " ").trim()
+	text = text.replace(/[\\/:*?"<>|]/g, "")
+	text = text.replace(/[. ]+$/g, "").trim()
+	if(text.length >= MAX_FILENAME_LENTH){
+		text = text.substring(0, MAX_FILENAME_LENTH).trim()
 	}
-	return selectedGenerator + "-" + text + "." + ext
+	if(!text){
+		text = selectedGenerator
+	}
+	return text + "." + ext
 }
 function pickRandomGenerator(){
 	var generator_names = Object.keys(generators)
