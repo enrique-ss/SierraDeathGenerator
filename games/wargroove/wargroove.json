@@ -36,7 +36,7 @@
 					"replace-background": "escolhas.png",
 					"no-expression": true,
 					"origin": {
-						"x": 5,
+						"x": 7,
 						"y": 0.5
 					}
 				},
@@ -45,7 +45,7 @@
 					"replace-background": "narrador.png",
 					"no-expression": true,
 					"origin": {
-						"x": 5,
+						"x": 9,
 						"y": 9
 					}
 				}
