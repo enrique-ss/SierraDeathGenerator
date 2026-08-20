@@ -37,7 +37,16 @@
 					"no-expression": true,
 					"origin": {
 						"x": 5,
-						"y": 1
+						"y": 0.5
+					}
+				},
+				"narrador": {
+					"title": "narrador",
+					"replace-background": "narrador.png",
+					"no-expression": true,
+					"origin": {
+						"x": 5,
+						"y": 9
 					}
 				}
 			}
