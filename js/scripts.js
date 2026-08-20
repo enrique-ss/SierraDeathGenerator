@@ -1443,6 +1443,12 @@ const MAX_FILENAME_LENTH = 64;
 function getNameForCurrentImage(ext){
 	var text = document.querySelector("textarea#sourcetext").value
 	text = text.replace(/\s+/g, " ").trim()
+	var atoEl = document.querySelector("#ato")
+	var ato = atoEl ? atoEl.value.replace(/\s+/g, " ").trim() : ""
+	if(ato){
+		text = ato + ": " + text
+	}
+	text = text.replace(/:/g, "：")
 	text = text.replace(/[\\/:*?"<>|]/g, "")
 	text = text.replace(/[. ]+$/g, "").trim()
 	if(text.length >= MAX_FILENAME_LENTH){

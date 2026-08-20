@@ -99,7 +99,8 @@
 		}
 		
 		.control-group select,
-		.control-group textarea {
+		.control-group textarea,
+		.control-group input[type="text"] {
 			padding: 8px;
 			border: 2px solid #3a3a4e;
 			border-radius: 6px;
@@ -110,7 +111,8 @@
 		}
 		
 		.control-group select:focus,
-		.control-group textarea:focus {
+		.control-group textarea:focus,
+		.control-group input[type="text"]:focus {
 			outline: none;
 			border-color: #ff6b9d;
 		}
@@ -119,6 +121,14 @@
 			resize: vertical;
 			min-height: 30px;
 			font-family: inherit;
+		}
+
+		.ato-group {
+			width: 100%;
+		}
+
+		.ato-group input[type="text"] {
+			width: 100%;
 		}
 		
 		.overlays {
@@ -204,6 +214,10 @@
 		</div>
 		
 		<div class="controls">
+			<div class="control-group ato-group">
+				<label for="ato">Ato</label>
+				<input type="text" id="ato" name="ato" autocomplete="off">
+			</div>
 			<div class="control-group">
 				<label for="sourcetext">Texto</label>
 				<textarea id="sourcetext" cols="40" rows="3"></textarea>
