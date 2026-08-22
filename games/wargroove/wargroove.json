@@ -48,6 +48,15 @@
 						"x": 9,
 						"y": 9
 					}
+				},
+				"botao": {
+					"title": "botao",
+					"replace-background": "botao.png",
+					"no-expression": true,
+					"origin": {
+						"x": 16.5,
+						"y": 0.5
+					}
 				}
 			}
 		},
