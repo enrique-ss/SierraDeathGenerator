@@ -1441,23 +1441,23 @@ function addLinksForSpecialCharactersAndInsertables(){
 const MAX_FILENAME_LENTH = 64; 
 
 function getNameForCurrentImage(ext){
-	var text = document.querySelector("textarea#sourcetext").value
-	text = text.replace(/\s+/g, " ").trim()
-	var atoEl = document.querySelector("#ato")
-	var ato = atoEl ? atoEl.value.replace(/\s+/g, " ").trim() : ""
-	if(ato){
-		text = ato + ": " + text
+	var atoText = $('#ato').val()
+	var fileName = atoText.trim()
+	
+	// Se não tiver texto, usa o nome do gerador
+	if(!fileName || fileName.length === 0){
+		fileName = selectedGenerator
 	}
-	text = text.replace(/:/g, "：")
-	text = text.replace(/[\\/:*?"<>|]/g, "")
-	text = text.replace(/[. ]+$/g, "").trim()
-	if(text.length >= MAX_FILENAME_LENTH){
-		text = text.substring(0, MAX_FILENAME_LENTH).trim()
+	
+	// Limita o tamanho do nome do arquivo
+	if(fileName.length > MAX_FILENAME_LENTH){
+		fileName = fileName.substring(0, MAX_FILENAME_LENTH)
 	}
-	if(!text){
-		text = selectedGenerator
-	}
-	return text + "." + ext
+	
+	// Remove caracteres inválidos para nome de arquivo
+	fileName = fileName.replace(/[<>:"/\\|?*]/g, '')
+	
+	return fileName + "." + ext
 }
 function pickRandomGenerator(){
 	var generator_names = Object.keys(generators)
