@@ -1111,6 +1111,9 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 	context.clearRect(0, 0, canvas.width, canvas.height)
 	
 	var bgY = first(fontInfo['background-y'], 0)
+	if(typeof bgY === 'string'){
+		bgY = eval(bgY)
+	}
 	context.save()
 	if(bgY !== 0){
 		context.translate(0, bgY * scale)
@@ -1258,19 +1261,25 @@ function syncExpressionVisibility(){
 		var opt = fontInfo.overlays.character.options[charKey]
 		var hideExpression = !!(opt && opt['no-expression'])
 		$('#overlay-expression').closest('label').toggle(!hideExpression)
-	}
-	if(fontInfo.overlays.character2){
-		var charKey2 = $('#overlay-character2').val()
-		var opt2 = fontInfo.overlays.character2.options[charKey2]
-		var hideExpression2 = !!(opt2 && opt2['no-expression'])
-		$('#overlay-expression2').closest('label').toggle(!hideExpression2)
+		
+		var isChar1Active = ['a', 'b', 'c'].includes(charKey)
+		
+		if(fontInfo.overlays.character2){
+			$('#overlay-character2').closest('label').toggle(isChar1Active)
+		}
+		if(fontInfo.overlays.expression2){
+			var charKey2 = $('#overlay-character2').val()
+			var opt2 = fontInfo.overlays.character2 ? fontInfo.overlays.character2.options[charKey2] : null
+			var hideExpression2 = !isChar1Active || !!(opt2 && opt2['no-expression'])
+			$('#overlay-expression2').closest('label').toggle(!hideExpression2)
+		}
 	}
 }
 
 function resetOverlays(){
 	overlayOverrides = {}
 	overlayNames = []
-	$('.overlays label').remove()
+	$('.overlays label.overlay-label:not(.no-group)').remove()
 	if('overlays' in fontInfo){
 		var overlays = fontInfo.overlays
 		for(key in overlays) {
@@ -1280,7 +1289,7 @@ function resetOverlays(){
 				if(overlay.title === '' || overlay.hidden){
 					continue
 				}
-				var labelwrapper=$("<label>").text(overlay.title+': ')
+				var labelwrapper=$("<label class='overlay-label'>").text(overlay.title+': ')
 				if(overlay.type=='slider'){
 					var range = $('<input type="range">').attr('id','overlay-'+key)
 					range.attr('min',first(overlay.min,0))

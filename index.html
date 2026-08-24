@@ -43,8 +43,8 @@
 
 		.main-layout {
 			display: flex;
-			flex-direction: row;
-			gap: 28px;
+			flex-direction: column;
+			gap: 24px;
 			align-items: center;
 		}
 		
@@ -52,11 +52,12 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			flex: 0 0 auto;
+			width: 100%;
+			max-width: 560px;
 		}
 		
 		#death {
-			max-width: 100%;
+			width: 100%;
 			height: auto;
 			image-rendering: pixelated;
 		}
@@ -66,7 +67,8 @@
 		}
 		
 		.controls {
-			flex: 1;
+			width: 100%;
+			max-width: 560px;
 			display: flex;
 			flex-direction: column;
 			gap: 12px;
@@ -128,9 +130,7 @@
 			font-family: inherit;
 		}
 
-		.no-group {
-			width: 100%;
-		}
+
 		
 		.overlays {
 			display: flex;
@@ -141,11 +141,11 @@
 		
 		.overlays label {
 			margin: 0;
-			flex: 1 1 130px;
+			flex: 1 1 95px;
 			display: flex;
 			flex-direction: column;
 			gap: 6px;
-			min-width: 130px;
+			min-width: 95px;
 		}
 		
 		.save-button {
@@ -184,6 +184,10 @@
 				flex-direction: column;
 			}
 			
+			.canvas-container {
+				max-width: 100%;
+			}
+			
 			h1 {
 				font-size: 1.4em;
 			}
@@ -212,16 +216,16 @@
 			</div>
 			
 			<div class="controls">
-				<div class="control-group no-group">
-					<label for="ato">Nó</label>
-					<input type="text" id="ato" name="ato" autocomplete="off">
-				</div>
 				<div class="control-group">
 					<label for="sourcetext">Texto</label>
 					<textarea id="sourcetext" cols="40" rows="3"></textarea>
 				</div>
 				
 				<div class="control-group overlays">
+					<label for="ato" class="overlay-label no-group">
+						Nó:
+						<input type="text" id="ato" name="ato" autocomplete="off">
+					</label>
 					<!-- Character and expression selectors will be inserted here by JS -->
 				</div>
 			</div>

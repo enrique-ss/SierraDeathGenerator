@@ -1,10 +1,11 @@
 {
 	"height": 14,
 	"scale": 3,
-	"background-y": 175,
+	"scale-mode": "nearest-neighbor",
+	"background-y": "((overlays.sprite && !overlays.sprite.skipDraw) || (overlays.sprite2 && !overlays.sprite2.skipDraw)) ? 175 : 0",
 	"dynamic-size": {
 		"w": "sceneBackground.width",
-		"h": "sceneBackground.height + (fontInfo['background-y'] || 0)"
+		"h": "sceneBackground.height + (typeof fontInfo['background-y'] === 'string' ? eval(fontInfo['background-y']) : (fontInfo['background-y'] || 0))"
 	},
 	"origin": {
 		"x": 49,
@@ -19,7 +20,7 @@
 			"y": 7,
 			"w": 36,
 			"h": 36,
-			"title": "Personagem 1",
+			"title": "Ator 1",
 			"default": "a",
 			"options": {
 				"a": {
@@ -96,7 +97,7 @@
 		"expression": {
 			"x": 0,
 			"y": 0,
-			"title": "Expressão 1",
+			"title": "Fantasia 1",
 			"default": "neutro",
 			"options": {
 				"neutro": {
@@ -112,7 +113,7 @@
 			}
 		},
 		"character2": {
-			"title": "Personagem 2",
+			"title": "Ator 2",
 			"default": "nenhum",
 			"options": {
 				"nenhum": {
@@ -164,7 +165,7 @@
 		"expression2": {
 			"x": 0,
 			"y": 0,
-			"title": "Expressão 2",
+			"title": "Fantasia 2",
 			"default": "neutro",
 			"options": {
 				"neutro": {
