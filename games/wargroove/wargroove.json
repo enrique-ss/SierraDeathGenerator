@@ -1,5 +1,10 @@
 {
 	"height": 14,
+	"background-y": 95,
+	"dynamic-size": {
+		"w": "sceneBackground.width",
+		"h": "sceneBackground.height + (fontInfo['background-y'] || 0)"
+	},
 	"origin": {
 		"x": 49,
 		"y": 10
@@ -13,7 +18,7 @@
 			"y": 7,
 			"w": 36,
 			"h": 36,
-			"title": "Personagem",
+			"title": "Personagem 1",
 			"default": "a",
 			"options": {
 				"a": {
@@ -60,10 +65,105 @@
 				}
 			}
 		},
+		"sprite": {
+			"x": 20,
+			"y": -90,
+			"w": 120,
+			"h": 110,
+			"title": "",
+			"bind": "character",
+			"default": "a",
+			"stage": "pre-background",
+			"options": {
+				"a": {
+					"file": "sprite/a.png"
+				},
+				"b": {
+					"file": "sprite/b.png",
+					"expression-map": {
+						"neutro": "neutra"
+					}
+				},
+				"c": {
+					"file": "sprite/c.png",
+					"expression-map": {
+						"neutro": "neutra"
+					}
+				}
+			}
+		},
 		"expression": {
 			"x": 0,
 			"y": 0,
-			"title": "Expressão",
+			"title": "Expressão 1",
+			"default": "neutro",
+			"options": {
+				"neutro": {
+				},
+				"feliz": {
+				},
+				"triste": {
+				},
+				"raiva": {
+				},
+				"timida": {
+				}
+			}
+		},
+		"character2": {
+			"title": "Personagem 2",
+			"default": "nenhum",
+			"options": {
+				"nenhum": {
+					"skip-draw": true,
+					"no-expression": true
+				},
+				"a": {
+					"skip-draw": true
+				},
+				"b": {
+					"skip-draw": true
+				},
+				"c": {
+					"skip-draw": true
+				}
+			}
+		},
+		"sprite2": {
+			"x": 140,
+			"y": -90,
+			"w": 120,
+			"h": 110,
+			"title": "",
+			"bind": "character2",
+			"default": "nenhum",
+			"stage": "pre-background",
+			"flip": "H",
+			"options": {
+				"nenhum": {
+					"skip-draw": true
+				},
+				"a": {
+					"file": "sprite/a.png"
+				},
+				"b": {
+					"file": "sprite/b.png",
+					"expression-map": {
+						"neutro": "neutra"
+					}
+				},
+				"c": {
+					"file": "sprite/c.png",
+					"expression-map": {
+						"neutro": "neutra"
+					}
+				}
+			}
+		},
+		"expression2": {
+			"x": 0,
+			"y": 0,
+			"title": "Expressão 2",
 			"default": "neutro",
 			"options": {
 				"neutro": {

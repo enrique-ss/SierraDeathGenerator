@@ -756,7 +756,8 @@ function parseOverlays(fontInfo){
 					"step":currentOverlay.step
 				}
 			}else{
-				var sname = $('#overlay-'+oname+' option:selected').val()
+				var bindKey = first(currentOverlay.bind, oname)
+				var sname = $('#overlay-'+bindKey+' option:selected').val()
 				var adv=currentOverlay.options[sname]
 				if(!adv){
 					continue
@@ -780,6 +781,7 @@ function parseOverlays(fontInfo){
 					"replaceBackground":replaceBackground,
 					"skipDraw":skipDraw,
 					"noExpression":first(adv['no-expression'], false),
+					"expressionField": first(currentOverlay['expression-field'], oname.endsWith('2') ? 'expression2' : 'expression'),
 					"origin":adv.origin
 				}
 
@@ -1022,8 +1024,9 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 				if(adv.useFile){
 					// Get expression selection to create combined filename
 					var expression = ''
-					if('expression' in overlays){
-						expression = overlays.expression.name
+					var expKey = adv.expressionField || 'expression'
+					if(expKey in overlays){
+						expression = overlays[expKey].name
 					}
 					
 					// Create combined filename: character_expression.png
@@ -1106,6 +1109,15 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 
 	// Clear before drawing, as transparents might get overdrawn
 	context.clearRect(0, 0, canvas.width, canvas.height)
+	
+	var bgY = first(fontInfo['background-y'], 0)
+	context.save()
+	if(bgY !== 0){
+		context.translate(0, bgY * scale)
+	}
+
+	drawOverlays('pre-background', hide_backgrounds)
+
 	if(hide_backgrounds){
 		// Only render the transparent-background when we're not saving the image
 		if(scaled){
@@ -1157,6 +1169,7 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 	fontManager.draw(mainFont, scale, originx, justify, justify_resolution, fontOriginY, first_line_justify, explicit_origins, outputSize)
 
 	drawOverlays('post-text', hide_backgrounds)
+	context.restore()
 }
 
 
@@ -1237,13 +1250,21 @@ function buildBorder(fontImage,fontInfo,w,h, border_sides){
 }
 
 function syncExpressionVisibility(){
-	if(!fontInfo || !fontInfo.overlays || !fontInfo.overlays.character){
+	if(!fontInfo || !fontInfo.overlays){
 		return
 	}
-	var charKey = $('#overlay-character').val()
-	var opt = fontInfo.overlays.character.options[charKey]
-	var hideExpression = !!(opt && opt['no-expression'])
-	$('#overlay-expression').closest('label').toggle(!hideExpression)
+	if(fontInfo.overlays.character){
+		var charKey = $('#overlay-character').val()
+		var opt = fontInfo.overlays.character.options[charKey]
+		var hideExpression = !!(opt && opt['no-expression'])
+		$('#overlay-expression').closest('label').toggle(!hideExpression)
+	}
+	if(fontInfo.overlays.character2){
+		var charKey2 = $('#overlay-character2').val()
+		var opt2 = fontInfo.overlays.character2.options[charKey2]
+		var hideExpression2 = !!(opt2 && opt2['no-expression'])
+		$('#overlay-expression2').closest('label').toggle(!hideExpression2)
+	}
 }
 
 function resetOverlays(){
@@ -1256,11 +1277,10 @@ function resetOverlays(){
 			if(overlays.hasOwnProperty(key)) {
 				overlayNames.push(key)
 				var overlay = overlays[key]
-				var labelwrapper=$("<label>").text(overlay.title+': ')
-				if(overlay.title ==''){
-					// Internal effect, don't show to the user
-					labelwrapper.addClass('internal-overlay')
+				if(overlay.title === '' || overlay.hidden){
+					continue
 				}
+				var labelwrapper=$("<label>").text(overlay.title+': ')
 				if(overlay.type=='slider'){
 					var range = $('<input type="range">').attr('id','overlay-'+key)
 					range.attr('min',first(overlay.min,0))
