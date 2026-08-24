@@ -94,12 +94,6 @@
 				},
 				"narrador": {
 					"file": "sprite/narrador.png"
-				},
-				"botao": {
-					"file": "sprite/narrador.png"
-				},
-				"escolhas": {
-					"file": "sprite/narrador.png"
 				}
 			}
 		},
