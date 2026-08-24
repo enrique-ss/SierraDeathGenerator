@@ -14,27 +14,20 @@
 		}
 		
 		body {
-			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			background: #2a2a3e;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+			background: #111118;
 			margin: 0;
-			padding: 8px;
+			padding: 24px;
 			min-height: 100vh;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
-			overflow-x: hidden;
 		}
 		
 		.container {
-			--ui-zoom: 1.5;
 			width: 100%;
-			max-width: min(600px, calc((100vw - 16px) / var(--ui-zoom)));
-			background: #1e1e2e;
-			border-radius: 15px;
-			padding: 15px;
-			box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-			zoom: var(--ui-zoom);
+			max-width: 960px;
 		}
 		
 		h1 {
@@ -43,17 +36,23 @@
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
 			background-clip: text;
-			margin: 0 0 15px 0;
-			font-size: 1.5em;
+			margin: 0 0 24px 0;
+			font-size: 1.8em;
+			font-weight: 700;
+		}
+
+		.main-layout {
+			display: flex;
+			flex-direction: row;
+			gap: 28px;
+			align-items: center;
 		}
 		
 		.canvas-container {
 			display: flex;
 			justify-content: center;
-			margin-bottom: 15px;
-			background: #2a2a3e;
-			border-radius: 8px;
-			padding: 10px;
+			align-items: center;
+			flex: 0 0 auto;
 		}
 		
 		#death {
@@ -67,15 +66,15 @@
 		}
 		
 		.controls {
+			flex: 1;
 			display: flex;
 			flex-direction: column;
-			gap: 10px;
-			margin-bottom: 10px;
+			gap: 12px;
 		}
 		
 		.control-row {
 			display: flex;
-			gap: 8px;
+			gap: 10px;
 		}
 		
 		.control-group {
@@ -86,28 +85,33 @@
 		
 		.control-group label {
 			font-weight: 600;
-			color: #b0b0c0;
-			margin-bottom: 4px;
-			font-size: 14px;
+			color: #8f8f9d;
+			margin-bottom: 6px;
+			font-size: 13px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
 		}
 		
 		label {
 			font-weight: 600;
-			color: #b0b0c0;
-			margin-bottom: 4px;
-			font-size: 14px;
+			color: #8f8f9d;
+			margin-bottom: 6px;
+			font-size: 13px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
 		}
 		
 		.control-group select,
 		.control-group textarea,
 		.control-group input[type="text"] {
-			padding: 8px;
-			border: 2px solid #3a3a4e;
+			padding: 10px 12px;
+			border: 2px solid #29293a;
 			border-radius: 6px;
 			font-size: 14px;
-			background: #2a2a3e;
-			color: #e0e0e0;
-			transition: border-color 0.3s;
+			background: #222232;
+			color: #e2e2e9;
+			transition: border-color 0.2s, box-shadow 0.2s;
+			width: 100%;
 		}
 		
 		.control-group select:focus,
@@ -115,45 +119,39 @@
 		.control-group input[type="text"]:focus {
 			outline: none;
 			border-color: #ff6b9d;
+			box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.15);
 		}
 		
 		.control-group textarea {
 			resize: vertical;
-			min-height: 30px;
+			min-height: 40px;
 			font-family: inherit;
 		}
 
 		.no-group {
 			width: 100%;
 		}
-
-		.no-group input[type="text"] {
-			width: 100%;
-		}
 		
 		.overlays {
 			display: flex;
 			flex-direction: row;
-			gap: 8px;
+			flex-wrap: wrap;
+			gap: 10px;
 		}
 		
 		.overlays label {
 			margin: 0;
-			flex: 1;
+			flex: 1 1 130px;
 			display: flex;
 			flex-direction: column;
-			gap: 4px;
-			min-width: 0;
-		}
-		
-		.overlays select {
-			width: 100%;
+			gap: 6px;
+			min-width: 130px;
 		}
 		
 		.save-button {
 			display: flex;
-			width: 60px;
-			height: 60px;
+			width: 52px;
+			height: 52px;
 			margin: 20px auto 0;
 			padding: 0;
 			background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
@@ -169,7 +167,7 @@
 		}
 		
 		.save-button:hover {
-			transform: translateY(-1px);
+			transform: translateY(-2px);
 			box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
 		}
 		
@@ -177,18 +175,17 @@
 			transform: translateY(0);
 		}
 		
-		@media (max-width: 720px) {
-			.control-row {
+		@media (max-width: 768px) {
+			body {
+				padding: 16px;
+			}
+
+			.main-layout {
 				flex-direction: column;
 			}
 			
-			.container {
-				padding: 10px;
-				border-radius: 10px;
-			}
-			
 			h1 {
-				font-size: 1.3em;
+				font-size: 1.4em;
 			}
 		}
 		
@@ -208,23 +205,25 @@
 	<div class="container">
 		<h1>Gerador de Diálogos</h1>
 		
-		<div class="canvas-container">
-			<canvas id="death"></canvas>
-			<canvas id="border"></canvas>
-		</div>
-		
-		<div class="controls">
-			<div class="control-group no-group">
-				<label for="ato">Nó</label>
-				<input type="text" id="ato" name="ato" autocomplete="off">
-			</div>
-			<div class="control-group">
-				<label for="sourcetext">Texto</label>
-				<textarea id="sourcetext" cols="40" rows="3"></textarea>
+		<div class="main-layout">
+			<div class="canvas-container">
+				<canvas id="death"></canvas>
+				<canvas id="border"></canvas>
 			</div>
 			
-			<div class="control-group overlays">
-				<!-- Character and expression selectors will be inserted here by JS -->
+			<div class="controls">
+				<div class="control-group no-group">
+					<label for="ato">Nó</label>
+					<input type="text" id="ato" name="ato" autocomplete="off">
+				</div>
+				<div class="control-group">
+					<label for="sourcetext">Texto</label>
+					<textarea id="sourcetext" cols="40" rows="3"></textarea>
+				</div>
+				
+				<div class="control-group overlays">
+					<!-- Character and expression selectors will be inserted here by JS -->
+				</div>
 			</div>
 		</div>
 	</div>

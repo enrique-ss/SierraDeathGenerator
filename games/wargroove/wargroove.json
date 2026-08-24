@@ -1,6 +1,7 @@
 {
 	"height": 14,
-	"background-y": 95,
+	"scale": 3,
+	"background-y": 175,
 	"dynamic-size": {
 		"w": "sceneBackground.width",
 		"h": "sceneBackground.height + (fontInfo['background-y'] || 0)"
@@ -66,10 +67,10 @@
 			}
 		},
 		"sprite": {
-			"x": 20,
-			"y": -90,
-			"w": 120,
-			"h": 110,
+			"x": 10,
+			"y": -170,
+			"w": 130,
+			"h": 190,
 			"title": "",
 			"bind": "character",
 			"default": "a",
@@ -131,9 +132,9 @@
 		},
 		"sprite2": {
 			"x": 140,
-			"y": -90,
-			"w": 120,
-			"h": 110,
+			"y": -170,
+			"w": 130,
+			"h": 190,
 			"title": "",
 			"bind": "character2",
 			"default": "nenhum",
