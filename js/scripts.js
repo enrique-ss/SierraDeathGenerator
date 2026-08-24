@@ -1265,6 +1265,10 @@ function syncExpressionVisibility(){
 		var isChar1Active = ['a', 'b', 'c'].includes(charKey)
 		
 		if(fontInfo.overlays.character2){
+			// Auto-set character2 to 'nenhum' when character1 is not a, b, or c
+			if(!isChar1Active){
+				$('#overlay-character2').val('nenhum')
+			}
 			$('#overlay-character2').closest('label').toggle(isChar1Active)
 		}
 		if(fontInfo.overlays.expression2){
