@@ -2,6 +2,8 @@
 
 Ferramenta web desenvolvida para auxiliar na criação de diálogos de visual novels e jogos estilo retrô. Permite preencher formulários com informações sobre atores, falas, interlocutores e expressões faciais, gerando dinamicamente screenshots e imagens dos diálogos formatados.
 
+Acesse em: [enrique-ss.github.io/gerador-de-dialogos](https://enrique-ss.github.io/gerador-de-dialogos)
+
 ## Como rodar
 
 Clone o repositório e abra o arquivo `index.html` no navegador.
