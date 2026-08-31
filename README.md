@@ -1,21 +1,11 @@
-The Death Generator
-=============================
+# Gerador de Diálogos
 
-> Try it out: [DeathGenerator.com](http://deathgenerator.com)
+Ferramenta web desenvolvida para auxiliar na criação de diálogos de visual novels e jogos estilo retrô. Permite preencher formulários com informações sobre atores, falas, interlocutores e expressões faciais, gerando dinamicamente screenshots e imagens dos diálogos formatados.
 
-This creates GAME OVER/YOU DIED screens as seen in Sierra Online's SCI engine,
-as well as lots of other fake videogame screenshots from many, many games.
+## Como rodar
 
-License
-=============================
-All the code is GPL3 licensed.
+Clone o repositório e abra o arquivo `index.html` no navegador.
 
-The data images themselves are copyright their original games/software, 
-and are used here under fair use. Consider that before you try to reuse them!
+## Stack
 
-Software credits
-=============================
-* jQuery
-* [jQuery waitForImages plugin](https://github.com/alexanderdickson/waitForImages)
-* [linebreak](https://github.com/devongovett/linebreak)
-* [jsgif](https://github.com/antimatter15/jsgif)
+HTML, CSS e JavaScript puro com auxílio de bibliotecas para manipuladores de imagens (jQuery, `jsgif`, `linebreak`).
